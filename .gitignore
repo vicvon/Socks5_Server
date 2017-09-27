@@ -30,3 +30,7 @@
 *.exe
 *.out
 *.app
+*.vcxproj
+Socks5-Server/Socks5-Server.vcxproj.user
+.vs/Socks5-server/v15/Browse.VC.db
+.vs/Socks5-server/v15/Browse.VC.opendb
