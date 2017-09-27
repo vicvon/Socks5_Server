@@ -193,11 +193,13 @@ static void listener_callback(struct evconnlistener * listener, evutil_socket_t 
     bufferevent_enable(bev, EV_READ | EV_WRITE);
 }
 
+static struct event_base * main_base;
+
 int main()
 {
     /* initialize main eventLoop, listening to client connect */
-    struct event_base *base = event_base_new();
-    if (!base)
+    main_base = event_base_new();
+    if (!main_base)
     {
         cout << "Could not initialize libevent!" << endl;
         return 1;
@@ -210,7 +212,7 @@ int main()
     sin.sin_port = htons(11080);
     sin.sin_addr.s_addr = INADDR_ANY;
 
-    struct evconnlistener *listener = evconnlistener_new_bind(base, listener_callback, (void *)base,
+    struct evconnlistener *listener = evconnlistener_new_bind(main_base, listener_callback, (void *)main_base,
                                                               LEV_OPT_CLOSE_ON_FREE | LEV_OPT_REUSEABLE,
                                                               -1, (sockaddr *)&sin, sizeof(sin));
     if (!listener)
@@ -219,8 +221,8 @@ int main()
         return 1;
     }
 
-    event_base_dispatch(base);
+    event_base_dispatch(main_base);
     evconnlistener_free(listener);
-    event_base_free(base);
+    event_base_free(main_base);
     return 0;
 }
