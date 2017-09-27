@@ -140,11 +140,11 @@ static void read_client_callback(struct bufferevent * bev, void * ctx)
             bufferevent_setcb(agent, agent_read_callback, NULL, agent_event_callback, ctx);
             bufferevent_enable(agent, EV_READ | EV_WRITE);
 
-            bufferevent_write(bev, response, 10);
+            bufferevent_write(bev, response, sizeof(response) - 1);
             return;
         FAIL:
             response[1] = 0x05;
-            bufferevent_write(bev, response, 10);
+            bufferevent_write(bev, response, sizeof(response) - 1);
         }
             break;
         case STAGE_CONNECTED:
